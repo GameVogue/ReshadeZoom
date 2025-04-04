@@ -1,4 +1,9 @@
-uniform float Toggle = 0.0;
+uniform float Toggle <
+    ui_type = "slider";
+    ui_min = 0.0;
+    ui_max = 1.0;
+    ui_step = 1.0;
+> = 0.0;
 
 float4 main(float4 pos : SV_Position, float2 uv : TexCoord) : SV_Target
 {
