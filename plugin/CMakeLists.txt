@@ -1,7 +1,7 @@
-add_library(reshade_test_plugin SHARED main.cpp)
+add_library(zoomscope SHARED main.cpp)
 
-target_include_directories(reshade_test_plugin PRIVATE ${CMAKE_SOURCE_DIR}/extern/reshade/include)
+target_include_directories(zoomscope PRIVATE ${CMAKE_SOURCE_DIR}/extern/reshade/include)
 
-set_target_properties(reshade_test_plugin PROPERTIES
+set_target_properties(zoomscope PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
 )
