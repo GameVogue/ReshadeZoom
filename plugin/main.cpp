@@ -62,17 +62,22 @@ uint8_t stringTocode(std::string key){
 
 // Callback to listen for keyboard input
 static void onReshadePresent(reshade::api::effect_runtime* runtime) {
-    if (isKeyPressed(runtime, stringTocode("F2"), false, false, false)) {
-        // Variable state
-        bool &state = toggle_states[runtime];
-        state = !state;
-
+    if (!isKeyPressed(runtime, stringTocode("Right Mouse"), false, false, false)) {
         // Set uniform variable in shader
-	const reshade::api::effect_uniform_variable synced_variable = runtime->find_uniform_variable("zoomscope.fx", "ZoomLevelDelta");
+	const reshade::api::effect_uniform_variable synced_variable = runtime->find_uniform_variable("zoomscope.fx", "DynamicZoomLevel");
         if (synced_variable != 0) {
-            float value = state ? 2.0f : 1.0f;
+            float value = 1;
             runtime->set_uniform_value_float(synced_variable, &value, 1);
         }
+    } else {
+        const short mouse_wheel_delta = runtime->mouse_wheel_delta();
+        if (mouse_wheel_delta != 0) {
+	    const reshade::api::effect_uniform_variable synced_variable = runtime->find_uniform_variable("zoomscope.fx", "DynamicZoomLevel");
+            if (synced_variable != 0) {
+                float value = mouse_wheel_delta;
+                runtime->set_uniform_value_float(synced_variable, &value, 1);
+            }
+	}
     }
 }
 
