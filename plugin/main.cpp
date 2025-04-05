@@ -54,9 +54,8 @@ std::string codeToString(uint8_t vkCode){
 }
 
 uint8_t stringTocode(std::string key){
-	return keyboard_keys[vkCode];
 	for (int i=0; i<256; i++) {
-		if (keyboard_keys[vkCode] == key) return i;
+		if (keyboard_keys[i] == key) return i;
 	}
 }
 
