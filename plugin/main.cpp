@@ -37,10 +37,21 @@ static const char *keyboard_keys[256] = {
 	"", "", "", "", "", "", "Attn", "CrSel", "ExSel", "Erase EOF", "Play", "Zoom", "", "PA1", "OEM Clear", ""
 };
 
+std::string codeToString(uint8_t vkCode){
+	return keyboard_keys[vkCode];
+}
+
+uint8_t stringTocode(std::string key){
+	for (int i=0; i<256; i++) {
+		if (keyboard_keys[i] == key) return i;
+	}
+	return 0;
+}
+
 bool isKeyPressed(const reshade::api::effect_runtime* runtime, std::string _keyStr, bool _altRequired, bool _shiftRequired, bool _ctrlRequired){
 	uint8_t _keyCode = stringToCode(_keyStr);
 	bool toReturn = false
-	if (_keyStr.find("Mouse") != string::npos) {
+	if (_keyStr.find("Mouse") != std::string::npos) {
 		toReturn = runtime->is_mouse_button_pressed(_keyCode);
 	} else {
 		toReturn = runtime->is_key_pressed(_keyCode);
@@ -53,17 +64,6 @@ bool isKeyPressed(const reshade::api::effect_runtime* runtime, std::string _keyS
 	toReturn &= ((_shiftRequired && shiftPressed) || (!_shiftRequired && !shiftPressed));
 	toReturn &= ((_ctrlRequired && ctrlPressed) || (!_ctrlRequired && !ctrlPressed));
 	return toReturn;
-}
-
-std::string codeToString(uint8_t vkCode){
-	return keyboard_keys[vkCode];
-}
-
-uint8_t stringTocode(std::string key){
-	for (int i=0; i<256; i++) {
-		if (keyboard_keys[i] == key) return i;
-	}
-	return 0;
 }
 
 // Callback to listen for keyboard input
