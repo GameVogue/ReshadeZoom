@@ -17,7 +17,7 @@ static void onReshadePresent(reshade::api::effect_runtime* runtime) {
 
         // Set uniform variable in shader
 	const reshade::api::effect_uniform_variable synced_variable = runtime->find_uniform_variable({}, "DynamicZoomLevel");
-        if (synced_variable != nullptr) {
+        if (synced_variable != 0) {
             float value = state ? 2.0f : 1.0f;
             runtime->set_uniform_value_float(synced_variable, &value, 1);
         }
@@ -28,7 +28,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID) {
     if (ul_reason_for_call == DLL_PROCESS_ATTACH) {
         reshade::register_addon(hModule);
 	reshade::register_event<reshade::addon_event::reshade_present>(onReshadePresent);
-    	_keyData.setKey("F2", false, false, false);
+    	_keyData.setKey(_keyData.getKeyCode("F2"), false, false, false);
     } else if (ul_reason_for_call == DLL_PROCESS_DETACH) {
 	reshade::unregister_event<reshade::addon_event::reshade_present>(onReshadePresent);
         reshade::unregister_addon(hModule);
