@@ -16,7 +16,7 @@ static void onReshadePresent(reshade::api::effect_runtime* runtime) {
         state = !state;
 
         // Set uniform variable in shader
-	const effect_uniform_variable synced_variable = runtime->find_uniform_variable({}, "DynamicZoomLevel");
+	const reshade::api::effect_uniform_variable synced_variable = runtime->find_uniform_variable({}, "DynamicZoomLevel");
         if (synced_variable != nullptr) {
             float value = state ? 2.0f : 1.0f;
             runtime->set_uniform_value_float(synced_variable, &value, 1);
