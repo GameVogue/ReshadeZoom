@@ -50,7 +50,7 @@ uint8_t stringToCode(std::string key){
 
 bool isKeyPressed(const reshade::api::effect_runtime* runtime, std::string _keyStr, bool _altRequired, bool _shiftRequired, bool _ctrlRequired){
 	uint8_t _keyCode = stringToCode(_keyStr);
-	bool toReturn = false:
+	bool toReturn = false;
 	if (_keyStr.find("Mouse") != std::string::npos) {
 		toReturn = runtime->is_mouse_button_pressed(_keyCode);
 	} else {
@@ -73,7 +73,7 @@ static void onReshadePresent(reshade::api::effect_runtime* runtime) {
 	const reshade::api::effect_uniform_variable synced_variable = runtime->find_uniform_variable("zoomscope.fx", "MouseWheelDelta");
         if (synced_variable != 0) {
             float data[2] = { 0.0f, 0.0f };
-            runtime->set_uniform_value_float(synced_variable, &data, 2);
+            runtime->set_uniform_value_float(synced_variable, &data[0], 2);
         }
     }
 }
