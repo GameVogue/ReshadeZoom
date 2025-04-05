@@ -84,9 +84,9 @@ public:
 	uint8_t getKeyCode() { return _keyCode;}
 	bool isValid() { return _keyCode > 0; }
 
+	static std::string codeToString(uint8_t vkCode);
+	static uint8_t stringToCode(std::string vkStr);
 private:
-	static std::string vkCodeToString(uint8_t vkCode);
-
 	void setKeyAsString();
 
 	uint8_t _keyCode;
