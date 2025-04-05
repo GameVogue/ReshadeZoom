@@ -41,7 +41,7 @@ std::string codeToString(uint8_t vkCode){
 	return keyboard_keys[vkCode];
 }
 
-uint8_t stringTocode(std::string key){
+uint8_t stringToCode(std::string key){
 	for (int i=0; i<256; i++) {
 		if (keyboard_keys[i] == key) return i;
 	}
@@ -50,7 +50,7 @@ uint8_t stringTocode(std::string key){
 
 bool isKeyPressed(const reshade::api::effect_runtime* runtime, std::string _keyStr, bool _altRequired, bool _shiftRequired, bool _ctrlRequired){
 	uint8_t _keyCode = stringToCode(_keyStr);
-	bool toReturn = false
+	bool toReturn = false:
 	if (_keyStr.find("Mouse") != std::string::npos) {
 		toReturn = runtime->is_mouse_button_pressed(_keyCode);
 	} else {
