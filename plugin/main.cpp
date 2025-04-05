@@ -73,7 +73,7 @@ static void onReshadePresent(reshade::api::effect_runtime* runtime) {
 	const reshade::api::effect_uniform_variable synced_variable = runtime->find_uniform_variable("zoomscope.fx", "MouseWheelDelta");
         if (synced_variable != 0) {
             float data[2] = { 0.0f, 0.0f };
-            runtime->set_uniform_value_float(synced_variable, &value, 2);
+            runtime->set_uniform_value_float(synced_variable, &data, 2);
         }
     }
 }
