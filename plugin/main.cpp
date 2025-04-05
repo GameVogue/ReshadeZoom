@@ -9,7 +9,7 @@ static std::unordered_map<reshade::api::effect_runtime *, bool> toggle_states;
 static KeyData _keyData;
 
 // Callback to listen for keyboard input
-static void onReshadePresent(effect_runtime* runtime)
+static void onReshadePresent(reshade::api::effect_runtime* runtime) {
     if (_keyData.isKeyPressed(runtime)) {
         // Variable state
         bool &state = toggle_states[runtime];
@@ -19,7 +19,7 @@ static void onReshadePresent(effect_runtime* runtime)
 	const effect_uniform_variable synced_variable = runtime->find_uniform_variable({}, "DynamicZoomLevel");
         if (synced_variable != nullptr) {
             float value = state ? 2.0f : 1.0f;
-            runtime->set_uniform_value_float(synced_variable, static_cast<const float *>(value), 1);
+            runtime->set_uniform_value_float(synced_variable, &value, 1);
         }
     }
 }
