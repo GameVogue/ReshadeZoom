@@ -32,8 +32,14 @@
 #pragma once
 
 #include <reshade_api.hpp>
-
-#include "stdafx.h"
+// Windows Header Files:
+#include <windows.h>
+#include <iostream>
+#include <string>
+#include <tchar.h>
+#include <Psapi.h>
+#include <utility>
+#include <vector>
 
 namespace ShaderToggler
 {
