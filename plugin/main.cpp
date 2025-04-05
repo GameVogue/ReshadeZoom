@@ -49,6 +49,24 @@ uint8_t stringToCode(std::string key){
     return 0;
 }
 
+bool isKeyDown(const reshade::api::effect_runtime* runtime, std::string _keyStr, bool _altRequired, bool _shiftRequired, bool _ctrlRequired){
+    uint8_t _keyCode = stringToCode(_keyStr);
+    bool toReturn = false;
+    if (_keyStr.find("Mouse") != std::string::npos) {
+        toReturn = runtime->is_mouse_button_down(_keyCode);
+    } else {
+        toReturn = runtime->is_key_down(_keyCode);
+    }
+    const bool altPressed = runtime->is_key_down(VK_MENU);;
+    const bool shiftPressed = runtime->is_key_down(VK_SHIFT);
+    const bool ctrlPressed = runtime->is_key_down(VK_CONTROL);
+
+    toReturn &= ((_altRequired && altPressed) || (!_altRequired && !altPressed));
+    toReturn &= ((_shiftRequired && shiftPressed) || (!_shiftRequired && !shiftPressed));
+    toReturn &= ((_ctrlRequired && ctrlPressed) || (!_ctrlRequired && !ctrlPressed));
+    return toReturn;
+}
+
 bool isKeyPressed(const reshade::api::effect_runtime* runtime, std::string _keyStr, bool _altRequired, bool _shiftRequired, bool _ctrlRequired){
     uint8_t _keyCode = stringToCode(_keyStr);
     bool toReturn = false;
@@ -73,16 +91,11 @@ static void onReshadePresent(reshade::api::effect_runtime* runtime) {
     const reshade::api::effect_uniform_variable wheel_var = runtime->find_uniform_variable("zoomscope.fx", "MouseWheelDelta");
     const reshade::api::effect_uniform_variable scale_var = runtime->find_uniform_variable("zoomscope.fx", "ZoomLevelDelta");
     if (zoom_var == 0 || wheel_var == 0 || scale_var == 0) return;
-    if (!isKeyPressed(runtime, "Right Mouse", false, false, false)) {
-        float DynamicZoomLevel = 0.0f;
+    if (!isKeyDown(runtime, "Right Mouse", false, false, false)) {
+        float DynamicZoomLevel = 1.0f;
         runtime->set_uniform_value_float(zoom_var, &DynamicZoomLevel, 1);
     } else {
-        float MouseWheelDelta[2] = {0.0f, 0.0f};
-        float ZoomLevelDelta = 0.0f;
-        runtime->get_uniform_value_float(wheel_var, &MouseWheelDelta[0], 2);
-        runtime->get_uniform_value_float(scale_var, &ZoomLevelDelta, 1);
-	
-        float DynamicZoomLevel = std::clamp(1.0f + ZoomLevelDelta * MouseWheelDelta[0], 1.0f, 10.0f);
+        float DynamicZoomLevel = 2.0f;
         runtime->set_uniform_value_float(zoom_var, &DynamicZoomLevel, 1);
     }
 }
