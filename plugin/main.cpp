@@ -57,6 +57,7 @@ uint8_t stringTocode(std::string key){
 	for (int i=0; i<256; i++) {
 		if (keyboard_keys[i] == key) return i;
 	}
+	return 0;
 }
 
 // Callback to listen for keyboard input
