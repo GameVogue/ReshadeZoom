@@ -1,6 +1,7 @@
 #include <reshade.hpp>
 #include <reshade_api.hpp>
 #include <unordered_map>
+#include <algorithm>
 
 // Windows Header Files:
 #include <windows.h>
