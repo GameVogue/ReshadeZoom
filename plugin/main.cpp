@@ -82,7 +82,7 @@ static void onReshadePresent(reshade::api::effect_runtime* runtime) {
         runtime->get_uniform_value_float(wheel_var, &(MouseWheelDelta[0]), 2);
         runtime->get_uniform_value_float(scale_var, &ZoomLevelDelta, 1);
 	
-        float DynamicZoomLevel = std::max(std::min(DynamicZoomLevel + ZoomLevelDelta * MouseWheelDelta[0], 10.0), 1);
+        float DynamicZoomLevel = std::max(std::min(1.0f + ZoomLevelDelta * MouseWheelDelta[0], 10.0f), 1.0f);
         runtime->set_uniform_value_float(zoom_var, &DynamicZoomLevel, 1);
     }
 }
