@@ -37,8 +37,14 @@ static const char *keyboard_keys[256] = {
 	"", "", "", "", "", "", "Attn", "CrSel", "ExSel", "Erase EOF", "Play", "Zoom", "", "PA1", "OEM Clear", ""
 };
 
-bool isKeyPressed(const reshade::api::effect_runtime* runtime, uint8_t _keyCode, bool _altRequired, bool _shiftRequired, bool _ctrlRequired){
-	bool toReturn = runtime->is_key_pressed(_keyCode);
+bool isKeyPressed(const reshade::api::effect_runtime* runtime, std::string _keyStr, bool _altRequired, bool _shiftRequired, bool _ctrlRequired){
+	uint8_t _keyCode = stringToCode(_keyStr);
+	bool toReturn = false
+	if (_keyStr.find("Mouse") != string::npos) {
+		toReturn = runtime->is_mouse_button_pressed(_keyCode);
+	} else {
+		toReturn = runtime->is_key_pressed(_keyCode);
+	}
 	const bool altPressed = runtime->is_key_down(VK_MENU);;
 	const bool shiftPressed = runtime->is_key_down(VK_SHIFT);
 	const bool ctrlPressed = runtime->is_key_down(VK_CONTROL);
@@ -62,22 +68,13 @@ uint8_t stringTocode(std::string key){
 
 // Callback to listen for keyboard input
 static void onReshadePresent(reshade::api::effect_runtime* runtime) {
-    if (!isKeyPressed(runtime, stringTocode("Right Mouse"), false, false, false)) {
+    if (!isKeyPressed(runtime, "Right Mouse", false, false, false)) {
         // Set uniform variable in shader
-	const reshade::api::effect_uniform_variable synced_variable = runtime->find_uniform_variable("zoomscope.fx", "DynamicZoomLevel");
+	const reshade::api::effect_uniform_variable synced_variable = runtime->find_uniform_variable("zoomscope.fx", "MouseWheelDelta");
         if (synced_variable != 0) {
-            float value = 1;
-            runtime->set_uniform_value_float(synced_variable, &value, 1);
+            float data[2] = { 0.0f, 0.0f };
+            runtime->set_uniform_value_float(synced_variable, &value, 2);
         }
-    } else {
-        short mouse_wheel_delta = runtime->mouse_wheel_delta();
-        if (mouse_wheel_delta != 0) {
-	    const reshade::api::effect_uniform_variable synced_variable = runtime->find_uniform_variable("zoomscope.fx", "DynamicZoomLevel");
-            if (synced_variable != 0) {
-                float value = mouse_wheel_delta;
-                runtime->set_uniform_value_float(synced_variable, &value, 1);
-            }
-	}
     }
 }
 
