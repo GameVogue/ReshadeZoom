@@ -1,4 +1,6 @@
 #include <reshade.hpp>
+#include <reshade/addon.hpp>
+#include <reshade/input.hpp>
 #include <unordered_map>
 
 extern "C" __declspec(dllexport) const char* NAME = "ReShade Zoom Plugin";
@@ -17,11 +19,11 @@ void on_input(reshade::api::effect_runtime *runtime, const reshade::input::input
         state = !state;
 
         // Set uniform variable in shader
-        reshade::api::effect_uniform_variable toggle_var = runtime->find_uniform_variable(nullptr, "DynamicZoomLevel");
+        reshade::api::effect_uniform_variable toggle_var = runtime->find_uniform_variable({}, "DynamicZoomLevel");
         if (toggle_var != nullptr)
         {
             float value = state ? 2.0f : 1.0f;
-            runtime->set_uniform_value(toggle_var, &value, 1);
+            reshade::invoke_addon_event<reshade::addon_event::set_uniform_value>(toggle_var, &value, 1);
         }
     }
 }
