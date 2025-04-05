@@ -70,7 +70,7 @@ static void onReshadePresent(reshade::api::effect_runtime* runtime) {
             runtime->set_uniform_value_float(synced_variable, &value, 1);
         }
     } else {
-        const short mouse_wheel_delta = runtime->mouse_wheel_delta();
+        short mouse_wheel_delta = runtime->mouse_wheel_delta();
         if (mouse_wheel_delta != 0) {
 	    const reshade::api::effect_uniform_variable synced_variable = runtime->find_uniform_variable("zoomscope.fx", "DynamicZoomLevel");
             if (synced_variable != 0) {
