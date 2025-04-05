@@ -41,61 +41,58 @@
 #include <utility>
 #include <vector>
 
-namespace ShaderToggler
+/// <summary>
+/// Class which is used to contain keybinding data
+/// </summary>
+class KeyData
 {
+public:
+	KeyData();
+
 	/// <summary>
-	/// Class which is used to contain keybinding data
+	/// Ini file variant which has ctrl/shift/alt requirements baked in.
 	/// </summary>
-	class KeyData
-	{
-	public:
-		KeyData();
+	/// <param name="newKeyValue"></param>
+	void setKeyFromIniFile(uint32_t newKeyValue);
+	/// <summary>
+	/// Sets the passed in vk keycode as the key to use for 
+	/// </summary>
+	/// <param name="newKeyValue"></param>
+	/// <param name="shiftRequired"></param>
+	/// <param name="altRequired"></param>
+	/// <param name="ctrlRequired"></param>
+	void setKey(uint8_t newKeyValue, bool shiftRequired=false, bool altRequired=false, bool ctrlRequired=false);
+	uint32_t getKeyForIniFile() const;
+	void clear();
+	/// <summary>
+	/// Used for when the instance of this class is used to collect temporary keybinding data for editing
+	/// </summary>
+	/// <param name="runtime"></param>
+	void collectKeysPressed(const reshade::api::effect_runtime* runtime);
+	/// <summary>
+	/// Returns true if the keyboard shortcut defined by this instance is currently pressed down
+	/// </summary>
+	/// <param name="runtime"></param>
+	/// <returns></returns>
+	bool isKeyPressed(const reshade::api::effect_runtime* runtime);
 
-		/// <summary>
-		/// Ini file variant which has ctrl/shift/alt requirements baked in.
-		/// </summary>
-		/// <param name="newKeyValue"></param>
-		void setKeyFromIniFile(uint32_t newKeyValue);
-		/// <summary>
-		/// Sets the passed in vk keycode as the key to use for 
-		/// </summary>
-		/// <param name="newKeyValue"></param>
-		/// <param name="shiftRequired"></param>
-		/// <param name="altRequired"></param>
-		/// <param name="ctrlRequired"></param>
-		void setKey(uint8_t newKeyValue, bool shiftRequired=false, bool altRequired=false, bool ctrlRequired=false);
-		uint32_t getKeyForIniFile() const;
-		void clear();
-		/// <summary>
-		/// Used for when the instance of this class is used to collect temporary keybinding data for editing
-		/// </summary>
-		/// <param name="runtime"></param>
-		void collectKeysPressed(const reshade::api::effect_runtime* runtime);
-		/// <summary>
-		/// Returns true if the keyboard shortcut defined by this instance is currently pressed down
-		/// </summary>
-		/// <param name="runtime"></param>
-		/// <returns></returns>
-		bool isKeyPressed(const reshade::api::effect_runtime* runtime);
+	/// <summary>
+	/// Returns a usable description for the keyboard shortcut, or 'Press a key' if undefined/empty
+	/// </summary>
+	/// <returns></returns>
+	std::string getKeyAsString() { return _keyAsString;}
+	uint8_t getKeyCode() { return _keyCode;}
+	bool isValid() { return _keyCode > 0; }
 
-		/// <summary>
-		/// Returns a usable description for the keyboard shortcut, or 'Press a key' if undefined/empty
-		/// </summary>
-		/// <returns></returns>
-		std::string getKeyAsString() { return _keyAsString;}
-		uint8_t getKeyCode() { return _keyCode;}
-		bool isValid() { return _keyCode > 0; }
+private:
+	static std::string vkCodeToString(uint8_t vkCode);
 
-	private:
-		static std::string vkCodeToString(uint8_t vkCode);
+	void setKeyAsString();
 
-		void setKeyAsString();
+	uint8_t _keyCode;
+	bool _shiftRequired;
+	bool _altRequired;
+	bool _ctrlRequired;
+	std::string _keyAsString;
 
-		uint8_t _keyCode;
-		bool _shiftRequired;
-		bool _altRequired;
-		bool _ctrlRequired;
-		std::string _keyAsString;
-
-	};
-}
+};
