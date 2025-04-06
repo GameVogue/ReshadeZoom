@@ -17,7 +17,7 @@ extern "C" __declspec(dllexport) const char* DESCRIPTION = "A plugin for handlin
 
 // from ReShade
 static const char *keyboard_keys[256] = {
-    "", "Left Mouse", "Right Mouse", "Cancel", "Middle Mouse", "X1 Mouse", "X2 Mouse", "", "Backspace", "Tab", "", "", "Clear", "Enter", "", "",
+    "Left Mouse", "Middle Mouse", "Right Mouse", "Cancel", "Forward", "X1 Mouse", "X2 Mouse", "", "Backspace", "Tab", "", "", "Clear", "Enter", "", "",
     "Shift", "Control", "Alt", "Pause", "Caps Lock", "", "", "", "", "", "", "Escape", "", "", "", "",
     "Space", "Page Up", "Page Down", "End", "Home", "Left Arrow", "Up Arrow", "Right Arrow", "Down Arrow", "Select", "", "", "Print Screen", "Insert", "Delete", "Help",
     "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "", "", "", "", "", "",
@@ -68,7 +68,7 @@ bool isKeyPressed(const reshade::api::effect_runtime* runtime, std::string _keyS
     uint8_t _keyCode = stringToCode(_keyStr);
     bool toReturn = false;
     if (_keyCode < 7) {
-        toReturn = runtime->is_mouse_button_pressed(_keyCode);
+        toReturn = runtime->is_any_mouse_button_down();
     } else {
         toReturn = runtime->is_key_pressed(_keyCode);
     }
@@ -107,7 +107,7 @@ static void onReshadePresent(reshade::api::effect_runtime* runtime) {
     if (zoom_var == 0 || wheel_var == 0 || scale_var == 0) return;
     if (!isKeyDown(runtime, "Right Mouse", false, false, false)) {
         float data[2] = { 0.0f, 0.0f };
-        runtime->set_uniform_value_float(synced_variable, &data[0], 2);
+        runtime->set_uniform_value_float(wheel_var, &data[0], 2);
     } else {
     }
 }
