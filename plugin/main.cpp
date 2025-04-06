@@ -50,7 +50,7 @@ bool isKeyDown(const reshade::api::effect_runtime* runtime, std::string _keyStr,
     uint8_t _keyCode = stringToCode(_keyStr);
     bool toReturn = false;
     if (_keyCode < 7) {
-        toReturn = runtime->is_any_mouse_button_down();
+        toReturn = runtime->is_mouse_button_down(_keyCode);
     } else {
         toReturn = runtime->is_key_down(_keyCode);
     }
@@ -105,10 +105,12 @@ static void onReshadePresent(reshade::api::effect_runtime* runtime) {
     const reshade::api::effect_uniform_variable wheel_var = runtime->find_uniform_variable("zoomscope.fx", "MouseWheelDelta");
     const reshade::api::effect_uniform_variable scale_var = runtime->find_uniform_variable("zoomscope.fx", "ZoomLevelDelta");
     if (zoom_var == 0 || wheel_var == 0 || scale_var == 0) return;
-    if (!isKeyDown(runtime, "Right Mouse", false, false, false)) {
+    if (isKeyDown(runtime, "Right Mouse", false, false, false) || isKeyDown(runtime, "Left Mouse", false, false, false) || isKeyDown(runtime, "Middle Mouse", false, false, false)) {
+        float data = 2.0f;
+        runtime->set_uniform_value_float(zoom_var, &data, 1);
+    } else {
         float data[2] = { 0.0f, 0.0f };
         runtime->set_uniform_value_float(wheel_var, &data[0], 2);
-    } else {
     }
 }
 
