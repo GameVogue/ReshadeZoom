@@ -101,14 +101,19 @@ bool isKeyReleased(const reshade::api::effect_runtime* runtime, std::string _key
 }
 
 static void onReshadePresent(reshade::api::effect_runtime* runtime) {
-    const reshade::api::effect_uniform_variable zoom_var = runtime->find_uniform_variable("zoomscope.fx", "DynamicZoomLevel");
-    const reshade::api::effect_uniform_variable wheel_var = runtime->find_uniform_variable("zoomscope.fx", "MouseWheelDelta");
-    const reshade::api::effect_uniform_variable scale_var = runtime->find_uniform_variable("zoomscope.fx", "ZoomLevelDelta");
-    if (zoom_var == 0 || wheel_var == 0 || scale_var == 0) return;
-    if (isKeyDown(runtime, "Right Mouse", false, false, false) || isKeyDown(runtime, "Left Mouse", false, false, false) || isKeyDown(runtime, "Middle Mouse", false, false, false)) {
-        runtime->set_uniform_value_float(zoom_var, 2.0f);
+    reshade::api::effect_uniform_variable enable_var = runtime->find_uniform_variable("zoomscope.fx", "EnableMagnifier");
+    reshade::api::effect_uniform_variable zoom_var = runtime->find_uniform_variable("zoomscope.fx", "DynamicZoomLevel");
+    reshade::api::effect_uniform_variable wheel_var = runtime->find_uniform_variable("zoomscope.fx", "MouseWheelDelta");
+    reshade::api::effect_uniform_variable scale_var = runtime->find_uniform_variable("zoomscope.fx", "ZoomLevelDelta");
+    if (enable_var == 0 || zoom_var == 0 || wheel_var == 0 || scale_var == 0) return;
+    float enabled = false;
+    runtime->get_uniform_value_bool(enable_var, &enabled, 1);
+    if (enabled) {
+        //DynamicZoomLevel = max(min(DynamicZoomLevel + ZoomLevelDelta * MouseWheelDelta.x, 10.0), 1);
+        runtime->set_uniform_value_float(zoom_var, 3.0f);
     } else {
-        runtime->set_uniform_value_float(wheel_var, 0.0f);
+        runtime->set_uniform_value_float(zoom_var, 2.0f);
+        //runtime->set_uniform_value_float(wheel_var, 0.0f);
     }
 }
 
