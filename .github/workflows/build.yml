@@ -25,11 +25,12 @@ jobs:
       run: cmake --build build --config Release
 
     - name: Rename .dll to .addon64
+      shell: pwsh
       run: |
-        mkdir -p artifact
-        DLL_PATH=$(find build/bin -name "*.dll" | head -n 1)
-        echo "Found DLL at: $DLL_PATH"
-        cp "$DLL_PATH" "artifact/zoomscope.addon64"
+        $dllPath = Get-ChildItem -Path "build/bin" -Recurse -Filter "*.dll" | Select-Object -First 1
+        Write-Host "Found DLL at: $($dllPath.FullName)"
+        New-Item -ItemType Directory -Path "artifact" -Force
+        Copy-Item -Path $dllPath.FullName -Destination "artifact/zoomscope.addon64"
 
     - name: Upload build artifact
       uses: actions/upload-artifact@v4
