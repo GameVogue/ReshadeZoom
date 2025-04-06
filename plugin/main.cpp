@@ -78,7 +78,7 @@ bool isKeyPressed(const reshade::api::effect_runtime* runtime, std::string _keyS
 
 // Callback to listen for keyboard input
 static void onReshadePresent(reshade::api::effect_runtime* runtime) {
-    if (!isKeyPressed(runtime, "Right Mouse", false, false, false)) {
+    if (!isKeyDown(runtime, "Right Mouse", false, false, false)) {
         // Set uniform variable in shader
 	const reshade::api::effect_uniform_variable synced_variable = runtime->find_uniform_variable("zoomscope.fx", "MouseWheelDelta");
         if (synced_variable != 0) {
