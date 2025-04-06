@@ -24,9 +24,16 @@ jobs:
     - name: Build
       run: cmake --build build --config Release
 
-    - name: Upload build artifacts
+    - name: Rename .dll to .addon64
+      run: |
+        mkdir -p artifact
+        DLL_PATH=$(find build/bin -name "*.dll" | head -n 1)
+        echo "Found DLL at: $DLL_PATH"
+        cp "$DLL_PATH" "artifact/zoomscope.addon64"
+
+    - name: Upload build artifact
       uses: actions/upload-artifact@v4
       with:
         name: zoomscope.addon64
-        path: |
-          build/bin/**/*.dll
+        path: artifact/zoomscope.addon64
+        if-no-files-found: error
