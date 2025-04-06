@@ -106,7 +106,7 @@ static void onReshadePresent(reshade::api::effect_runtime* runtime) {
     reshade::api::effect_uniform_variable wheel_var = runtime->find_uniform_variable("zoomscope.fx", "MouseWheelDelta");
     reshade::api::effect_uniform_variable scale_var = runtime->find_uniform_variable("zoomscope.fx", "ZoomLevelDelta");
     if (enable_var == 0 || zoom_var == 0 || wheel_var == 0 || scale_var == 0) return;
-    float enabled = false;
+    bool enabled = false;
     runtime->get_uniform_value_bool(enable_var, &enabled, 1);
     if (enabled) {
         //DynamicZoomLevel = max(min(DynamicZoomLevel + ZoomLevelDelta * MouseWheelDelta.x, 10.0), 1);
