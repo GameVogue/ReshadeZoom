@@ -50,7 +50,7 @@ bool isKeyDown(const reshade::api::effect_runtime* runtime, std::string _keyStr,
     uint8_t _keyCode = stringToCode(_keyStr);
     bool toReturn = false;
     if (_keyCode < 7) {
-        toReturn = runtime->is_mouse_button_down(_keyCode);
+        toReturn = runtime->is_any_mouse_button_down();
     } else {
         toReturn = runtime->is_key_down(_keyCode);
     }
@@ -68,7 +68,7 @@ bool isKeyPressed(const reshade::api::effect_runtime* runtime, std::string _keyS
     uint8_t _keyCode = stringToCode(_keyStr);
     bool toReturn = false;
     if (_keyCode < 7) {
-        toReturn = runtime->is_any_mouse_button_down();
+        toReturn = runtime->is_mouse_button_pressed(_keyCode);
     } else {
         toReturn = runtime->is_key_pressed(_keyCode);
     }
